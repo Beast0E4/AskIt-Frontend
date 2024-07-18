@@ -4,7 +4,7 @@ import axiosInstance from "../../config/axiosInstance";
 
 
 const initialState = {
-    data: JSON.parse(localStorage.getItem("data")) || undefined,
+    data: JSON.parse(localStorage.getItem("data")) || null,
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") || false
 };
@@ -51,6 +51,7 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(login.fulfilled, (state, action) => {
+            console.log(action.payload);
             if(!action.payload) return;
             state.isLoggedIn = (action.payload.data?.token != undefined);
             state.data = action.payload.data?.userData;
