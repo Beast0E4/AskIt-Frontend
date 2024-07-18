@@ -1,9 +1,9 @@
-import Navbar from "./layouts/nav.layouts"
+import MainRoutes from "./routing/mainRoutes"
 
 function App() {
   return (
     <>
-    <Navbar/>
+    <MainRoutes />
     </>
   )
 }

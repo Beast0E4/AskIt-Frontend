@@ -1,6 +1,16 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar(){
+
+    const authState = useSelector((state) => state.auth);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!authState.isLoggedIn) navigate('/login');
+    }, []);
+
     return (
         <div className="navbar bg-base-100 shadow-lg">
             <div className="navbar-start">
@@ -21,12 +31,12 @@ function Navbar(){
                 </div>
                 <ul
                     tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow gap-3">
                     <li><Link to={'/'}>Home</Link></li>
-                    <li><Link to={'/'}></Link></li>
+                    <li><Link to={'/'}>Other</Link></li>
                 </ul>
                 </div>
-                <a className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">daisyUI</a>
+                <a className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">AskIt</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
