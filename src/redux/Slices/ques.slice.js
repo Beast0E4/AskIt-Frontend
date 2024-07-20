@@ -114,7 +114,6 @@ const QuestionSlice = createSlice({
             state.downloadedQuestions = action?.payload?.data?.question;
         })
         .addCase(currQues.fulfilled, (state, action) => {
-            console.log(action.payload.data.question);
             if(!action?.payload?.data) return;
             state.currentQuestion.ques = action.payload.data.question;
         })

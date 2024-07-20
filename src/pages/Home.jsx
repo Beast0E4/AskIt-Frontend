@@ -3,10 +3,28 @@ import Navbar from "../layouts/NavBar";
 import { Link } from "react-router-dom";
 import Question from "../layouts/Question";
 import useQuestions from "../hooks/useQuestions";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getAllSolutions, getSolutions } from "../redux/Slices/ans.slice";
 
 function Home() {
 
     const [quesState] = useQuestions();
+    const dispatch = useDispatch();
+
+    async function loadSolutions(){
+        let array = [];
+        let n = quesState.questionList.length
+        for(let i = 0; i < n; i ++){
+            const ans = await dispatch(getSolutions(quesState.questionList[i]._id));
+            array[i] = ans.payload.data.data;
+        }
+        await dispatch(getAllSolutions(array));
+    }
+
+    useEffect(() => {
+        loadSolutions();
+    }, [quesState.questionList])
 
     return (
         <>

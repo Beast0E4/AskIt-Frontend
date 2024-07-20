@@ -4,25 +4,35 @@ import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
     downloadedAnswers: [],
-    answerList: [],
+    solutionList: [[]],
     currentAnswer: {
         ans: ""
     }
 };
 
-// export const getAllQuestions = createAsyncThunk('questions/getAllQuestions', async () => {
-//     try {
-//         const response = axiosInstance.get('question', {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         });
-//         if(!response) toast.error('Something went wrong');
-//         return await response;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// });
+export const getAllSolutions = createAsyncThunk('solutions/getAllSolutions', async (data) => {
+    try {
+        const response = data;
+        if(!response) toast.error('Something went wrong');
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+export const getSolutions = createAsyncThunk('solutions/getSolutions', async (quesId) => {
+    try {
+        const response = axiosInstance.get(`solution/${quesId}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+        if(!response) toast.error('Something went wrong');
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 // export const currQues = createAsyncThunk('currQues', async (data) => {
 //     try {
@@ -108,16 +118,14 @@ const answerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        // .addCase(getAllQuestions.fulfilled, (state, action) => {
-        //     if(!action?.payload?.data) return;
-        //     state.questionList = action?.payload?.data?.question;
-        //     state.downloadedQuestions = action?.payload?.data?.question;
-        // })
-        // .addCase(currQues.fulfilled, (state, action) => {
-        //     console.log(action.payload.data.question);
-        //     if(!action?.payload?.data) return;
-        //     state.currentQuestion.ques = action.payload.data.question;
-        // })
+        .addCase(getSolutions.fulfilled, (state, action) => {
+            if(!action?.payload?.data) return;
+            state.solutionList = action?.payload?.data?.data;
+        })
+        .addCase(getAllSolutions.fulfilled, (state, action) => {
+            if(!action?.payload) return;
+            state.solutionList = action?.payload;
+        })
         // .addCase(updateQuestion.fulfilled, (state, action) => {
         //     console.log(action.payload);
         //     const updatedQuestion = action.payload.data.result;

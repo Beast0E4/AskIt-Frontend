@@ -1,20 +1,40 @@
 import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currQues } from "../redux/Slices/ques.slice";
+import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 function Question({questionId,  question, createdAt, creator}) {
 
+    // const ansState = useSelector((state) => state.ans);
+    const ansState = useSelector((state) => state.ans);
+    const quesState = useSelector((state) => state.ques);
     const [userState] = useUsers();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [idx, setIdx] = useState();
+
     async function answer() {
         const res =  await dispatch(currQues(questionId));
-        console.log(res);
         if(res) navigate('/answer');
     }
+
+    function filterquestion() {
+        const n = quesState.questionList.length;
+        let index = 0;
+        for(var i = 0; i < n; i ++){
+            if(quesState.questionList[i]._id === questionId){
+                index = i; break;
+            }
+        }
+        setIdx(index);
+    }
+
+    useEffect(() => {
+        filterquestion();
+    }, [questionId])
 
     return (
         <article className="mb-4 w-[70vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
@@ -56,7 +76,7 @@ function Question({questionId,  question, createdAt, creator}) {
             </div>
             <div className="w-full">
                 <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">ANSWER
-                    <span className="ml-3">{length}</span>
+                    <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
                 </button>
             </div>
         </article>
