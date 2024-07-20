@@ -15,7 +15,7 @@ function Home() {
                 {quesState.questionList?.map((quest) => {
                     let date = quest.createdAt.split('T')[0].split('-');
                     date = date[2] + "-" + date[1] + "-" + date[0];
-                    return (<Question key={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
+                    return (<Question key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
                 })}
             </div>
             <Link to={'/question'}>

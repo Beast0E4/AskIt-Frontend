@@ -1,9 +1,20 @@
+import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
+import { useDispatch } from "react-redux";
+import { currQues } from "../redux/Slices/ques.slice";
 
 // eslint-disable-next-line react/prop-types
-function Question({question, createdAt, creator}) {
+function Question({questionId,  question, createdAt, creator}) {
 
     const [userState] = useUsers();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    async function answer() {
+        const res =  await dispatch(currQues(questionId));
+        console.log(res);
+        if(res) navigate('/answer');
+    }
 
     return (
         <article className="mb-4 w-[70vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
@@ -42,6 +53,11 @@ function Question({question, createdAt, creator}) {
             <p>
                 {question}
             </p>
+            </div>
+            <div className="w-full">
+                <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">ANSWER
+                    <span className="ml-3">{length}</span>
+                </button>
             </div>
         </article>
     )

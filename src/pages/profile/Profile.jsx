@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-function Profile({ name, email }) {
+function Profile() {
 
     const authState = useSelector((state) => state.auth); 
 

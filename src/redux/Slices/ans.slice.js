@@ -3,40 +3,40 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
-    downloadedQuestions: [],
-    questionList: [],
-    currentQuestion: {
-        ques: ""
+    downloadedAnswers: [],
+    answerList: [],
+    currentAnswer: {
+        ans: ""
     }
 };
 
-export const getAllQuestions = createAsyncThunk('questions/getAllQuestions', async () => {
-    try {
-        const response = axiosInstance.get('question', {
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            }
-        });
-        if(!response) toast.error('Something went wrong');
-        return await response;
-    } catch (error) {
-        console.log(error);
-    }
-});
+// export const getAllQuestions = createAsyncThunk('questions/getAllQuestions', async () => {
+//     try {
+//         const response = axiosInstance.get('question', {
+//             headers: {
+//                 'x-access-token': localStorage.getItem('token')
+//             }
+//         });
+//         if(!response) toast.error('Something went wrong');
+//         return await response;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// });
 
-export const currQues = createAsyncThunk('currQues', async (data) => {
-    try {
-        const response = axiosInstance.get(`question/${data}`, {
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            }
-        });
-        if(!response) toast.error('Something went wrong');
-        return await response;
-    } catch (error) {
-        console.log(error);
-    }
-})
+// export const currQues = createAsyncThunk('currQues', async (data) => {
+//     try {
+//         const response = axiosInstance.get(`question/${data}`, {
+//             headers: {
+//                 'x-access-token': localStorage.getItem('token')
+//             }
+//         });
+//         if(!response) toast.error('Something went wrong');
+//         return await response;
+//     } catch (error) {
+//         console.log(error);
+//     }
+// })
 
 // export const getAllCreatedQuestionsForTheUser = createAsyncThunk('Questions/getAllCreatedQuestionsForTheUser', async () => {
 //     try {
@@ -74,16 +74,16 @@ export const currQues = createAsyncThunk('currQues', async (data) => {
 //     }
 // });
 
-export const createQuestion = createAsyncThunk('question/createQuestion', async (question) => {
+export const createAnswer = createAsyncThunk('answer/createAnswer', async (answer) => {
     try {
-        const response = axiosInstance.post(`question`, question, {
+        const response = axiosInstance.post(`solution/submit`, answer, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
         toast.promise(response, {
-            success: 'Successfully created the Question',
-            loading: 'Creating the Question...',
+            success: 'Successfully created the answer',
+            loading: 'Creating the answer...',
             error: 'Something went wrong'
         });
         return await response;
@@ -92,8 +92,8 @@ export const createQuestion = createAsyncThunk('question/createQuestion', async 
     }
 });
 
-const QuestionSlice = createSlice({
-    name: 'Questions',
+const answerSlice = createSlice({
+    name: 'answer',
     initialState,
     reducers: {
         // filterQuestion: (state, action) => {
@@ -108,16 +108,16 @@ const QuestionSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(getAllQuestions.fulfilled, (state, action) => {
-            if(!action?.payload?.data) return;
-            state.questionList = action?.payload?.data?.question;
-            state.downloadedQuestions = action?.payload?.data?.question;
-        })
-        .addCase(currQues.fulfilled, (state, action) => {
-            console.log(action.payload.data.question);
-            if(!action?.payload?.data) return;
-            state.currentQuestion.ques = action.payload.data.question;
-        })
+        // .addCase(getAllQuestions.fulfilled, (state, action) => {
+        //     if(!action?.payload?.data) return;
+        //     state.questionList = action?.payload?.data?.question;
+        //     state.downloadedQuestions = action?.payload?.data?.question;
+        // })
+        // .addCase(currQues.fulfilled, (state, action) => {
+        //     console.log(action.payload.data.question);
+        //     if(!action?.payload?.data) return;
+        //     state.currentQuestion.ques = action.payload.data.question;
+        // })
         // .addCase(updateQuestion.fulfilled, (state, action) => {
         //     console.log(action.payload);
         //     const updatedQuestion = action.payload.data.result;
@@ -140,11 +140,9 @@ const QuestionSlice = createSlice({
         //         state.QuestionDistribution[Question.status] += 1;
         //     });
         // })
-        .addCase(createQuestion.fulfilled, (state, action) => {
+        .addCase(createAnswer.fulfilled, (state, action) => {
+            console.log(action.payload.data);
             if(action?.payload?.data === undefined) return;
-            const newQuestion = action.payload.data;
-            state.downloadedQuestions.push(newQuestion); 
-            state.QuestionList = state.downloadedQuestions;
         })
         // .addCase(getAllCreatedQuestionsForTheUser.fulfilled, (state, action) => {
         //     if(!action?.payload?.data) return;
@@ -165,6 +163,6 @@ const QuestionSlice = createSlice({
     }
 });
 
-export const { resetQuestionList } = QuestionSlice.actions;
+export const { resetQuestionList } = answerSlice.actions;
 
-export default QuestionSlice.reducer;
+export default answerSlice.reducer;

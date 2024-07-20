@@ -68,11 +68,7 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        toast.promise(response, {
-            loading: 'Loading users',
-            success: 'Successfully loaded users',
-            error: 'Something went wrong, try again'
-        });
+        if(!response) toast.error('Something went wrong');
         return await response;
     } catch (error) {
         console.log(error);
@@ -109,10 +105,8 @@ const authSlice = createSlice({
             }
         })
         .addCase(getUsers.fulfilled, (state, action) => {
-            // console.log(action?.payload?.data?.users);
             if(!action?.payload?.data) return;
             state.userList = action?.payload?.data?.users;
-            console.log(state.userList);
         });
     }
 });
