@@ -61,7 +61,7 @@ function SignUp() {
                             <input type="password"  name="password" id="confirmPassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                         </div>
                         <button onClick={onSubmit} className="w-full text-white bg-gray-800 border py-2 rounded-md hover:bg-gray-900 transition-all ease-in-out">Create an account</button>
-                        <p className="text-sm font-light text-gray-500 dark:text-gray-400">Already have an account? <Link to={'/signin'} className="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign in here</Link></p>
+                        <p className="text-sm font-light text-gray-500 dark:text-gray-400">Already have an account? <Link to={'/login'} className="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign in here</Link></p>
                     </div>
                 </div>
             </div>
