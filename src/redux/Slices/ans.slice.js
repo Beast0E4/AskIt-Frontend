@@ -102,6 +102,24 @@ export const createAnswer = createAsyncThunk('answer/createAnswer', async (answe
     }
 });
 
+export const deleteSol = createAsyncThunk('/sol/delete', async(id) => {
+    try {
+        const response = axiosInstance.delete(`solution/deleteSolution/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        toast.promise(response, {
+            loading: 'Deleting the solution',
+            success: 'Successfully deleted the solution',
+            error: 'Something went wrong, try again'
+        });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const answerSlice = createSlice({
     name: 'answer',
     initialState,

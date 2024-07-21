@@ -18,7 +18,7 @@ function AnswerPage() {
         console.log(index);
         setIdx(index);
 
-        const dt = quesState.currentQuestion.ques.createdAt.split('T')[0].split('-')
+        const dt = quesState?.currentQuestion?.ques?.createdAt?.split('T')[0].split('-')
         setDate(dt[2] + "-" + dt[1] + "-" + dt[0]);
 
         setName(user.name);
@@ -26,10 +26,6 @@ function AnswerPage() {
 
     useEffect(() => {
         loadUser();
-        window.addEventListener("beforeunload", (event) => {
-            event.preventDefault();
-            return event.returnValue = "Are you sure you want to leave the page?";
-        });
     }, []);
 
     return (
@@ -74,9 +70,9 @@ function AnswerPage() {
             </article>
             <div className="flex flex-col items-end">
                 {ansState.solutionList[idx]?.map((sol) => {
-                    let date = sol.createdAt.split('T')[0].split('-');
+                    let date = sol?.createdAt?.split('T')[0].split('-');
                     date = date[2] + "-" + date[1] + "-" + date[0];
-                    return (<Answer key={sol._id} creator={sol.userId} solution={sol.solution} createdAt={date}/>)
+                    return (<Answer key={sol._id} solId={sol._id} creator={sol.userId} solution={sol.solution} createdAt={date}/>)
                 })}
             </div>
         </div>

@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../../redux/Slices/auth.slice";
+import toast from "react-hot-toast";
 
 function SignUp() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [password, setPassword] = useState("");
     const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
@@ -16,7 +18,8 @@ function SignUp() {
 
     function handleChange(e) {
         const {name, value} = e.target;
-        setUserDetails({
+        if(name === 'confirmPassword') setPassword(value);
+        else setUserDetails({
             ...userDetails,
             [name] : value
         })
@@ -30,13 +33,29 @@ function SignUp() {
         })
     }
 
+    const handleKeyPress = useCallback((e) => {
+        if(e.key === 'Enter') document.getElementById('submitButton').click();
+      }, []);
+    
+
     async function onSubmit() {
         if(!userDetails.email || !userDetails.name || !userDetails.password) return;
+        if(userDetails.password !== password){
+            console.log(password);
+            toast.error('The passwords do not match'); return;
+        }
         resetDetails();
         console.log(userDetails);
         const response = await dispatch(signup(userDetails));
         if(response.payload) navigate('/login');
     }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     return (
         <section className="h-[90vh] flex flex-col items-center pt-6 justify-center">
@@ -54,13 +73,13 @@ function SignUp() {
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input onChange={handleChange} type="password" name="password" id="password" value={userDetails.password} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                            <input onChange={handleChange} type="password" name="password" value={userDetails.password} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
-                            <input type="password"  name="password" id="confirmPassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                            <input onChange={handleChange} type="password"  value={password} name="confirmPassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                         </div>
-                        <button onClick={onSubmit} className="w-full text-white bg-gray-800 border py-2 rounded-md hover:bg-gray-900 transition-all ease-in-out">Create an account</button>
+                        <button onClick={onSubmit} id="submitButton" className="w-full text-white bg-gray-800 border py-2 rounded-md hover:bg-gray-900 transition-all ease-in-out">Create an account</button>
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400">Already have an account? <Link to={'/login'} className="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign in here</Link></p>
                     </div>
                 </div>

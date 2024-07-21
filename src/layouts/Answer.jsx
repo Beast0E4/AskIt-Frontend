@@ -1,9 +1,31 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteSol } from "../redux/Slices/ans.slice";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function Answer({solution, createdAt, creator}) {
+function Answer({solId, solution, createdAt, creator}) {
 
     const authState = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [name, setName] = useState("");
+
+    function findName(){
+        const nm = authState.userList.find((e) => e._id === creator)?.name;
+        setName(nm);
+    }
+
+    async function onDelete(){
+        const res = await dispatch(deleteSol(solId));
+        if(res.payload) navigate('/');
+    }
+
+    useEffect(() => {
+        findName();
+    }, []);
 
     return (
         <article className="mb-4 w-[90vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
@@ -14,7 +36,7 @@ function Answer({solution, createdAt, creator}) {
                 </a> */}
                 <div className="flex flex-col">
                 <div className="flex items-center">
-                    <a className="inline-block text-lg font-bold mr-2 text-md" href="#">{authState.userList.find((e) => e._id === creator)?.name}</a>
+                    <a className="inline-block text-lg font-bold mr-2 text-md" href="#">{name}</a>
                 </div>
                 <div className="text-slate-500 text-sm dark:text-slate-300">
                     {createdAt}
@@ -39,9 +61,12 @@ function Answer({solution, createdAt, creator}) {
             Web Design templates Selection
             </h2> */}
             <div className="py-4">
-            <p>
-                {solution}
-            </p>
+                <p>
+                    {solution}
+                </p>
+            </div>
+            <div className="w-full flex justify-end">
+                {authState.data.name === name && <MdDelete className="hover:cursor-pointer" onClick={onDelete}/>}
             </div>
         </article>
     )

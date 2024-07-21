@@ -36,6 +36,24 @@ export const currQues = createAsyncThunk('currQues', async (data) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+export const deleteQues = createAsyncThunk('/ques/delete', async(id) => {
+    try {
+        const response = axiosInstance.delete(`question/deleteQuestion/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        toast.promise(response, {
+            loading: 'Deleting the question',
+            success: 'Successfully deleted the question',
+            error: 'Something went wrong, try again'
+        });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 // export const getAllCreatedQuestionsForTheUser = createAsyncThunk('Questions/getAllCreatedQuestionsForTheUser', async () => {
@@ -110,7 +128,7 @@ const QuestionSlice = createSlice({
         builder
         .addCase(getAllQuestions.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
-            state.questionList = action?.payload?.data?.question;
+            state.questionList = action?.payload?.data?.question.reverse();
             state.downloadedQuestions = action?.payload?.data?.question;
         })
         .addCase(currQues.fulfilled, (state, action) => {
@@ -143,6 +161,7 @@ const QuestionSlice = createSlice({
             if(action?.payload?.data === undefined) return;
             const newQuestion = action.payload.data;
             state.downloadedQuestions.push(newQuestion); 
+            console.log(state.downloadedQuestions);
             state.QuestionList = state.downloadedQuestions;
         })
         // .addCase(getAllCreatedQuestionsForTheUser.fulfilled, (state, action) => {

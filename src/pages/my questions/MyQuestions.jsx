@@ -2,9 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import useQuestions from "../../hooks/useQuestions";
 import { getAllSolutions, getSolutions } from "../../redux/Slices/ans.slice";
 import { Link } from "react-router-dom";
-import Question from "../../layouts/Question";
 import { IoMdAdd } from "react-icons/io";
 import { useEffect } from "react";
+import MyQuestionLayout from "../../layouts/MyQuestionLayout";
+import { getUsers } from "./../../redux/Slices/auth.slice";
 
 function MyQuestions() {
     const [quesState] = useQuestions();
@@ -22,18 +23,22 @@ function MyQuestions() {
         await dispatch(getAllSolutions(array));
     }
 
+    async function loadUsers(){
+        await dispatch(getUsers());
+    }
+
     useEffect(() => {
-        loadSolutions();
+        loadSolutions(); loadUsers();
     }, [quesState.questionList])
 
     return (
         <>
             <div className="w-full flex flex-col items-center my-3 mt-24">
-                {quesState.questionList?.map((quest) => {
+                {authState.userList.length && quesState.questionList?.map((quest) => {
                     if(quest.userId === authState.data._id){
                         let date = quest.createdAt.split('T')[0].split('-');
                         date = date[2] + "-" + date[1] + "-" + date[0];
-                        return (<Question key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
+                        return (<MyQuestionLayout key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
                     }
                 })}
             </div>

@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { currQues } from "../redux/Slices/ques.slice";
+import { currQues, deleteQues } from "../redux/Slices/ques.slice";
 import { useEffect, useState } from "react";
-import { getUser } from "../redux/Slices/auth.slice";
-import UserDetailsModal from "./UserDetailsModal";
+import { MdDelete } from "react-icons/md";
 
 // eslint-disable-next-line react/prop-types
-function Question({questionId,  question, createdAt, creator}) {
+function MyQuestionLayout({questionId,  question, createdAt, creator}) {
 
     // const ansState = useSelector((state) => state.ans);
     const ansState = useSelector((state) => state.ans);
@@ -17,8 +16,6 @@ function Question({questionId,  question, createdAt, creator}) {
     const dispatch = useDispatch();
 
     const [idx, setIdx] = useState();
-    const [userIdx, setUserIdx] = useState();
-    const [name, setName] = useState("");
 
     async function answer() {
         const res =  await dispatch(currQues(questionId));
@@ -36,27 +33,19 @@ function Question({questionId,  question, createdAt, creator}) {
         setIdx(index);
     }
 
-    function findName(){
-        const nm = authState.userList.findIndex((e) => e._id === creator);
-        setUserIdx(nm);
-        setName(authState.userList[nm].name);
-    }
-
-    async function userView() {
-        const res = await dispatch(getUser(authState.userList[userIdx]._id));
-        if(res){
-            document.getElementById('userModal').showModal();
-        }
-    }
-
     async function onView() {
         const res =  await dispatch(currQues(questionId));
         if(res) navigate('/answers');
     }
 
+    async function onDelete(){
+        const res = await dispatch(deleteQues(questionId));
+        if(res.payload) location.reload();
+    }
+
     useEffect(() => {
-        filterquestion(); findName();
-    }, [questionId, authState.userList.length])
+        filterquestion();
+    }, [questionId])
 
     return (
         <article className="mb-4 w-[70vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
@@ -67,7 +56,7 @@ function Question({questionId,  question, createdAt, creator}) {
                 </a> */}
                 <div className="flex flex-col">
                 <div className="flex items-center">
-                    <a onClick={userView} className="inline-block text-lg font-bold mr-2 text-md hover:cursor-pointer hover:underline">{name}</a>
+                    <a className="inline-block text-lg font-bold mr-2 text-md" href="#">{authState.userList.find((e) => e._id === creator)?.name}</a>
                 </div>
                 <div className="text-slate-500 text-sm dark:text-slate-300">
                     {createdAt}
@@ -96,15 +85,19 @@ function Question({questionId,  question, createdAt, creator}) {
                 {question}
             </p>
             </div>
-            <div className="w-full flex gap-4">
-                <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">Add answer
-                    <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
-                </button>
-                <button onClick={onView} className="font-medium text-xs text-white hover:underline">View Answers</button>
+            <div className="flex">
+                <div className="w-full flex gap-4">
+                    <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">Add answer
+                        <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
+                    </button>
+                    <button onClick={onView} className="font-medium text-xs text-white hover:underline">View Answers</button>
+                </div>
+                <div>
+                    <MdDelete className="hover:cursor-pointer" onClick={onDelete}/>
+                </div>
             </div>
-            <UserDetailsModal />
         </article>
     )
 }
 
-export default Question;
+export default MyQuestionLayout;

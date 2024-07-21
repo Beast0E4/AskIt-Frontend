@@ -47,7 +47,7 @@ function Navbar(){
                 <Link to={'/'} className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">AskIt</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1 gap-2">
+                <ul className="flex text-base font-medium px-1 gap-5">
                     <li><Link to={'/'} id="Home">Home</Link></li>
                     <li><Link to={'/myquestions'} id="MyQuestions">My Questions</Link></li>
                     <li onClick={onLogout} ><Link>Logout</Link></li>

@@ -2,19 +2,18 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
 
-
 const initialState = {
-    data: JSON.parse(localStorage.getItem("data")) || null,
+    data: JSON.parse(localStorage.getItem("data")) || undefined,
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") || false,
-    user: {
+    selectedUser:{
         name: "",
-        email: ""
+        registered: [],
     },
     userList: []
 };
 
-export const login = createAsyncThunk('/auth/signin', async (data) => {     
+export const login = createAsyncThunk('/auth/login', async (data) => {    
     try {
         const response = axiosInstance.post("auth/signin", data);
         toast.promise(response, {
@@ -42,18 +41,14 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
     }
 });
 
-export const getUser = createAsyncThunk('auth/getUser', async (data) => {     
+export const getUser = createAsyncThunk('auth/getUser', async (id) => {     
     try {
-        const response = axiosInstance.get(`users/${data}`, {
+        const response = axiosInstance.get(`users/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        toast.promise(response, {
-            loading: 'Submitting the details',
-            success: 'Successfully signed up',
-            error: 'Something went wrong, try again'
-        });
+        if(!response) toast.error('Could not fetch the user');
         return await response;
     } catch (error) {
         console.log(error);
@@ -88,7 +83,6 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(login.fulfilled, (state, action) => {
-            console.log(action.payload);
             if(!action.payload) return;
             state.isLoggedIn = (action.payload.data?.token != undefined);
             state.data = action.payload.data?.userData;
@@ -98,9 +92,10 @@ const authSlice = createSlice({
             localStorage.setItem("isLoggedIn", (action.payload.data?.token != undefined));
         })
         .addCase(getUser.fulfilled, (state, action) => {
-            state.user = {
+            if(!action?.payload?.data) return;
+            state.selectedUser = {
                 name: action.payload.data.name,
-                email: action.payload.data.email
+                registered: action.payload.data.createdAt.split('T')[0].split('-')
             }
         })
         .addCase(getUsers.fulfilled, (state, action) => {
