@@ -35,10 +35,10 @@ function Answer() {
 
     return(
         <section className="h-[90vh] flex flex-col items-center pt-6 justify-center">
-            <div className="w-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+            <div className="w-[90vw] h-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 xl:p-0">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-3xl uppercase font-bold">Create your answer</h1>
-                    <p className="my-2 bg-gray-500 py-3 px-2">
+                    <p className="my-2 bg-gray-600 py-3 px-2">
                         {quesState.currentQuestion.ques.question}
                     </p>
                     <h3 className="mt-10">Add answer here</h3>

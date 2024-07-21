@@ -39,16 +39,18 @@ function Navbar(){
                 <ul
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow gap-3">
-                    <li><Link to={'/'}>Home</Link></li>
+                    <li><Link to={'/'} id="Home">Home</Link></li>
+                    <li><Link to={'/myquestions'} id="MyQuestions">My Questions</Link></li>
                     <li onClick={onLogout}><Link>Logout</Link></li>
                 </ul>
                 </div>
-                <a className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">AskIt</a>
+                <Link to={'/'} className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">AskIt</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    <li><Link to={'/'}>Home</Link></li>
-                    <li onClick={onLogout}><Link>Logout</Link></li>
+                <ul className="menu menu-horizontal px-1 gap-2">
+                    <li><Link to={'/'} id="Home">Home</Link></li>
+                    <li><Link to={'/myquestions'} id="MyQuestions">My Questions</Link></li>
+                    <li onClick={onLogout} ><Link>Logout</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">

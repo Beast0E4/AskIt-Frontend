@@ -79,8 +79,8 @@ function Question({questionId,  question, createdAt, creator}) {
                 {question}
             </p>
             </div>
-            <div className="w-full">
-                <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">ANSWER
+            <div className="w-full flex gap-4">
+                <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">Add answer
                     <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
                 </button>
                 <button onClick={onView} className="font-medium text-xs text-white hover:underline">View Answers</button>

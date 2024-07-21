@@ -6,6 +6,8 @@ import Question from "../pages/createQuestion/Question";
 import Profile from "../pages/profile/Profile";
 import Answer from "../pages/createAnswer/Answer";
 import AnswerPage from "../pages/answers/AnswerPage";
+import MyQuestions from "../pages/my questions/MyQuestions";
+import Navbar from "../layouts/NavBar";
 
 function MainRoutes() {
     return (
@@ -15,8 +17,9 @@ function MainRoutes() {
             <Route path="/question" element={<Question/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/answer" element={<Answer/>}/>
-            <Route path="/" element={<Home/>} />
+            <Route path="/" element={<><Navbar/><Home/></>} />
             <Route path="/answers" element={<AnswerPage/>}/>
+            <Route path="/myquestions" element={<><Navbar/><MyQuestions/></>}/>
         </Routes>
     )
 }
