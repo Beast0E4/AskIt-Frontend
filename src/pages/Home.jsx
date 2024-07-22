@@ -4,7 +4,7 @@ import Question from "../layouts/Question";
 import useQuestions from "../hooks/useQuestions";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSolutions, getSolutions } from "../redux/Slices/ans.slice";
+import { getAllSolutions, getSolutionByQuestion } from "../redux/Slices/ans.slice";
 import { getUsers } from "../redux/Slices/auth.slice";
 
 function Home() {
@@ -18,7 +18,7 @@ function Home() {
         let array = [];
         let n = quesState.questionList.length
         for(let i = 0; i < n; i ++){
-            const ans = await dispatch(getSolutions(quesState.questionList[i]._id));
+            const ans = await dispatch(getSolutionByQuestion(quesState.questionList[i]._id));
             array[i] = ans.payload.data.data;
         }
         await dispatch(getAllSolutions(array));

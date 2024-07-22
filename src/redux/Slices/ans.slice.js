@@ -5,9 +5,7 @@ import axiosInstance from "../../config/axiosInstance";
 const initialState = {
     downloadedAnswers: [],
     solutionList: [[]],
-    currentAnswer: {
-        ans: ""
-    }
+    currentAnswer: {}
 };
 
 export const getAllSolutions = createAsyncThunk('solutions/getAllSolutions', async (data) => {
@@ -20,9 +18,9 @@ export const getAllSolutions = createAsyncThunk('solutions/getAllSolutions', asy
     }
 });
 
-export const getSolutions = createAsyncThunk('solutions/getSolutions', async (quesId) => {
+export const getSolutionByQuestion = createAsyncThunk('solutions/solutionByQuestion', async (quesId) => {
     try {
-        const response = axiosInstance.get(`solution/${quesId}`, {
+        const response = axiosInstance.get(`solutionByQuestion/${quesId}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -34,55 +32,19 @@ export const getSolutions = createAsyncThunk('solutions/getSolutions', async (qu
     }
 });
 
-// export const currQues = createAsyncThunk('currQues', async (data) => {
-//     try {
-//         const response = axiosInstance.get(`question/${data}`, {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         });
-//         if(!response) toast.error('Something went wrong');
-//         return await response;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// })
-
-// export const getAllCreatedQuestionsForTheUser = createAsyncThunk('Questions/getAllCreatedQuestionsForTheUser', async () => {
-//     try {
-//         const response = axiosInstance.get('getMyCreatedQuestions', {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         });
-//         toast.promise(response, {
-//             success: 'Successfully loaded all the Questions',
-//             loading: 'Fetching Questions belonging to you',
-//             error: 'Something went wrong'
-//         });
-//         return await response;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// });
-
-// export const updateQuestion = createAsyncThunk('Questions/updateQuestion', async (Question) => {
-//     try {
-//         const response = axiosInstance.patch(`Question/${Question._id}`, Question, {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         });
-//         toast.promise(response, {
-//             success: 'Successfully update the Question',
-//             loading: 'Updating the Question...',
-//             error: 'Something went wrong'
-//         });
-//         return await response;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// });
+export const getSolution = createAsyncThunk('solution', async(solId) => {
+    try {
+        const response = axiosInstance.get(`solution/${solId}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(!response) toast.error('Something went wrong');
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 export const createAnswer = createAsyncThunk('answer/createAnswer', async (answer) => {
     try {
@@ -96,6 +58,20 @@ export const createAnswer = createAsyncThunk('answer/createAnswer', async (answe
             loading: 'Creating the answer...',
             error: 'Something went wrong'
         });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+export const updateAnswer = createAsyncThunk('answer/updateAnswer', async ({id, solution}) => {
+    try {
+        const response = axiosInstance.patch(`solution/updateSolution/${id}`, solution, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+        if(!response) toast.error('Something went wrong');
         return await response;
     } catch (error) {
         console.log(error);
@@ -123,20 +99,9 @@ export const deleteSol = createAsyncThunk('/sol/delete', async(id) => {
 const answerSlice = createSlice({
     name: 'answer',
     initialState,
-    reducers: {
-        // filterQuestion: (state, action) => {
-        //     let status = action.payload.status.toLowerCase();
-        //     if(status === "in progress") status = "inProgress";
-        //     if(status === "on hold") status = "onHold";
-        //     state.questionList = state.downloadedQuestions.filter((Question) => Question.status === status);
-        // },
-        resetQuestionList: (state) => {
-            state.questionList = state.downloadedQuestions; 
-        }
-    },
     extraReducers: (builder) => {
         builder
-        .addCase(getSolutions.fulfilled, (state, action) => {
+        .addCase(getSolutionByQuestion.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
             state.solutionList = action?.payload?.data?.data;
         })
@@ -144,51 +109,15 @@ const answerSlice = createSlice({
             if(!action?.payload) return;
             state.solutionList = action?.payload;
         })
-        // .addCase(updateQuestion.fulfilled, (state, action) => {
-        //     console.log(action.payload);
-        //     const updatedQuestion = action.payload.data.result;
-        //     state.QuestionList = state.QuestionList.map((Question) => {
-        //         if(Question._id === updatedQuestion._id) return updatedQuestion;
-        //         return Question;
-        //     });
-        //     state.downloadedQuestions = state.downloadedQuestions.map((Question) => {
-        //         if(Question._id === updatedQuestion._id) return updatedQuestion;
-        //         return Question;
-        //     });
-        //     state.QuestionDistribution = {
-        //         open: 0,
-        //         inProgress: 0,
-        //         onHold: 0,
-        //         cancelled: 0,
-        //         resolved: 0
-        //     };
-        //     state.downloadedQuestions.forEach(Question => {
-        //         state.QuestionDistribution[Question.status] += 1;
-        //     });
-        // })
         .addCase(createAnswer.fulfilled, (state, action) => {
             console.log(action.payload.data);
             if(action?.payload?.data === undefined) return;
         })
-        // .addCase(getAllCreatedQuestionsForTheUser.fulfilled, (state, action) => {
-        //     if(!action?.payload?.data) return;
-        //     state.QuestionList = action?.payload?.data?.result;
-        //     const Questions = action?.payload?.data?.result;
-        //     state.downloadedQuestions = action?.payload?.data?.result;
-        //     state.QuestionDistribution = {
-        //         open: 0,
-        //         inProgress: 0,
-        //         onHold: 0,
-        //         cancelled: 0,
-        //         resolved: 0
-        //     };
-        //     Questions.forEach(Question => {
-        //         state.QuestionDistribution[Question.status] += 1;
-        //     });
-        // })
+        .addCase(getSolution.fulfilled, (state, action) => {
+            if(!action?.payload?.data) return;
+            state.currentAnswer = action?.payload?.data?.data;
+        })
     }
 });
-
-export const { resetQuestionList } = answerSlice.actions;
 
 export default answerSlice.reducer;

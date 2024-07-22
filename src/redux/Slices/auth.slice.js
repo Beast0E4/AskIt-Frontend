@@ -69,6 +69,42 @@ export const getUsers = createAsyncThunk('users/getUsers', async () => {
     }
 });
 
+export const updateUser = createAsyncThunk('user/updateUser', async(data) => {
+    try {
+        const response = axiosInstance.patch('users/updateUser', data, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        toast.promise(response, {
+            loading: 'Updating the details',
+            success: 'Successfully updated',
+            error: 'Something went wrong, try again'
+        });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+export const deleteUser = createAsyncThunk('user/deleteUser', async(id) => {
+    try {
+        const response = axiosInstance.delete(`users/deleteUser/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        toast.promise(response, {
+            loading: 'Deleting account',
+            success: 'Successfully delete',
+            error: 'Something went wrong, try again'
+        });
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,

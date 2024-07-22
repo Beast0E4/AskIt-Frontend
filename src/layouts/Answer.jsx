@@ -3,13 +3,16 @@ import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteSol } from "../redux/Slices/ans.slice";
 import { useNavigate } from "react-router-dom";
+import { TbPencil } from "react-icons/tb";
+import EditAnswerModal from "./EditAnswerModal";
 
 // eslint-disable-next-line react/prop-types
 function Answer({solId, solution, createdAt, creator}) {
 
-    const authState = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const authState = useSelector((state) => state.auth);
 
     const [name, setName] = useState("");
 
@@ -23,6 +26,10 @@ function Answer({solId, solution, createdAt, creator}) {
         if(res.payload) navigate('/');
     }
 
+    async function editAnswer(){
+        document.getElementById('answerModal').showModal()
+    }
+
     useEffect(() => {
         findName();
     }, []);
@@ -30,17 +37,21 @@ function Answer({solId, solution, createdAt, creator}) {
     return (
         <article className="mb-4 w-[90vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
             <div className="flex pb-6 items-center justify-between">
-            <div className="flex">
+            <div className="w-full flex justify-between items-center">
                 {/* <a className="inline-block mr-4" href="#">
                 <img className="rounded-full max-w-none w-14 h-14" src="https://randomuser.me/api/portraits/men/33.jpg" />
                 </a> */}
                 <div className="flex flex-col">
-                <div className="flex items-center">
-                    <a className="inline-block text-lg font-bold mr-2 text-md" href="#">{name}</a>
+                    <div className="flex items-center">
+                        <a className="inline-block text-lg font-bold mr-2 text-md" href="#">{name}</a>
+                    </div>
+                    <div className="text-slate-500 text-sm dark:text-slate-300">
+                        {createdAt}
+                    </div>
                 </div>
-                <div className="text-slate-500 text-sm dark:text-slate-300">
-                    {createdAt}
-                </div>
+                <div className="flex gap-3">
+                    {authState.data.name === name && <TbPencil onClick={editAnswer} className="w-[1.5rem] h-[1.5rem] hover:cursor-pointer"/>}
+                    {authState.data.name === name && <MdDelete className="hover:cursor-pointer w-[1.5rem] h-[1.5rem]" onClick={onDelete}/>}
                 </div>
             </div>
             </div>
@@ -65,9 +76,7 @@ function Answer({solId, solution, createdAt, creator}) {
                     {solution}
                 </p>
             </div>
-            <div className="w-full flex justify-end">
-                {authState.data.name === name && <MdDelete className="hover:cursor-pointer" onClick={onDelete}/>}
-            </div>
+            <EditAnswerModal solution={solution} solutionId={solId}/>
         </article>
     )
 }

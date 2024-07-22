@@ -13,6 +13,7 @@ function SignUp() {
     const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
+        profession: "",
         password: ""
     })
 
@@ -29,6 +30,7 @@ function SignUp() {
         setUserDetails({
             name: "",
             email: "",
+            profession: "",
             password: ""
         })
     }
@@ -39,7 +41,7 @@ function SignUp() {
     
 
     async function onSubmit() {
-        if(!userDetails.email || !userDetails.name || !userDetails.password) return;
+        if(!userDetails.email.toString().trim() || !userDetails.name.toString().trim() || !userDetails.password.toString().trim() || !userDetails.profession.toString().trim()) return;
         if(userDetails.password !== password){
             console.log(password);
             toast.error('The passwords do not match'); return;
@@ -58,7 +60,7 @@ function SignUp() {
     }, [handleKeyPress]);
 
     return (
-        <section className="h-[90vh] flex flex-col items-center pt-6 justify-center">
+        <section className="h-[100vh] flex flex-col items-center pt-6 justify-center">
             <div className="w-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">Create an account</h1>
@@ -70,6 +72,10 @@ function SignUp() {
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email Id</label>
                             <input onChange={handleChange} type="email" name="email" value={userDetails.email} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="johndoe@enter.com" required/>
+                        </div>
+                        <div>
+                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profession</label>
+                            <input onChange={handleChange} type="text" name="profession" value={userDetails.profession} placeholder="Engineer" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
                         </div>
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>

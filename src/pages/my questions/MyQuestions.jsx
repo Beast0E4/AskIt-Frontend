@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import useQuestions from "../../hooks/useQuestions";
-import { getAllSolutions, getSolutions } from "../../redux/Slices/ans.slice";
+import { getAllSolutions, getSolutionByQuestion } from "../../redux/Slices/ans.slice";
 import { Link } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import { useEffect } from "react";
@@ -17,7 +17,7 @@ function MyQuestions() {
         let array = [];
         let n = quesState.questionList.length
         for(let i = 0; i < n; i ++){
-            const ans = await dispatch(getSolutions(quesState.questionList[i]._id));
+            const ans = await dispatch(getSolutionByQuestion(quesState.questionList[i]._id));
             array[i] = ans.payload.data.data;
         }
         await dispatch(getAllSolutions(array));

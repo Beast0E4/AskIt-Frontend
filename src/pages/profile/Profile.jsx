@@ -1,132 +1,84 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import EditProfileModal from "../../layouts/EditProfileModal";
+import DeleteModal from "../../layouts/DeleteModal";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../redux/Slices/auth.slice";
 
 function Profile() {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const authState = useSelector((state) => state.auth); 
 
+    function showModal() {
+        document.getElementById('profileModal').showModal();
+    }
+
+    function showDeleteModal() {
+        document.getElementById('deleteModal').showModal();
+    }
+
+    function onLogout(){
+        dispatch(logout());
+        navigate('/login');
+    }
+
     return (
-        <section className="w-full overflow-hidden bg-gray-800">
-            <div className="flex flex-col">
-                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="User Cover"
-                        className="w-full xl:h-[20rem] lg:h-[18rem] md:h-[16rem] sm:h-[14rem] xs:h-[11rem]" />
-
-                <div className="sm:w-[80%] xs:w-[90%] mx-auto flex">
-                    {/* <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw3fHxwZW9wbGV8ZW58MHwwfHx8MTcxMTExMTM4N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="User Profile"
-                            className="rounded-md lg:w-[12rem] lg:h-[12rem] md:w-[10rem] md:h-[10rem] sm:w-[8rem] sm:h-[8rem] xs:w-[7rem] xs:h-[7rem] outline outline-2 outline-offset-2 outline-blue-500 relative lg:bottom-[5rem] sm:bottom-[4rem] xs:bottom-[3rem]" /> */}
-
-                    <h1
-                        className="w-full text-left my-4 sm:mx-4 xs:pl-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif">
-                        {authState.data.name}</h1>
-
+        <section className="relative pt-40 pb-24">
+            <div className="w-full absolute top-0 left-0 z-0 h-60 bg-gray-900"></div>
+            <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
+                <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
+                    <img src="https://pagedone.io/asset/uploads/1705471668.png" alt="user-avatar-image" className="border-4 border-solid border-white rounded-full" />
                 </div>
-
-                <div
-                    className="h-[40vh] xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-4 items-center relative lg:-top-8 md:-top-6 sm:-top-4 xs:-top-4">
-                    {/* <p className="w-fit text-gray-700 dark:text-gray-400 text-md">Lorem, ipsum dolor sit amet
-                        consectetur adipisicing elit. Quisquam debitis labore consectetur voluptatibus mollitia dolorem
-                        veniam omnis ut quibusdam minima sapiente repellendus asperiores explicabo, eligendi odit, dolore
-                        similique fugiat dolor, doloremque eveniet. Odit, consequatur. Ratione voluptate exercitationem hic
-                        eligendi vitae animi nam in, est earum culpa illum aliquam.</p> */}
-
-
-                    <div className="w-full my-auto py-6 flex flex-col justify-center gap-2">
-                        <div className="w-full flex sm:flex-row xs:flex-col gap-2 justify-center">
-                            <div className="w-full">
-                                <dl className="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                                    <div className="flex flex-col pb-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Name</dt>
-                                        <dd className="text-lg font-semibold">{authState.data.name}</dd>
-                                    </div>
-                                    {/* <div className="flex flex-col py-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Date Of Birth</dt>
-                                        <dd className="text-lg font-semibold">21/02/1997</dd>
-                                    </div> */}
-                                    {/* <div className="flex flex-col py-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Gender</dt>
-                                        <dd className="text-lg font-semibold">Male</dd>
-                                    </div> */}
-                                </dl>
-                            </div>
-                            <div className="w-full">
-                                <dl className="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                                    {/* <div className="flex flex-col pb-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Email</dt>
-                                        <dd className="text-lg font-semibold">Ethiopia, Addis Ababa</dd>
-                                    </div> */}
-
-                                    {/* <div className="flex flex-col pt-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Phone Number</dt>
-                                        <dd className="text-lg font-semibold">+251913****30</dd>
-                                    </div> */}
-                                    <div className="flex flex-col pt-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Email</dt>
-                                        <dd className="text-lg font-semibold">{authState.data.email}</dd>
-                                    </div>
-
-                                    {/* <div className="flex flex-col pt-3">
-                                        <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Website</dt>
-                                        <dd className="text-lg font-semibold">https://www.teclick.com</dd>
-                                    </div> */}
-                                </dl>
-                            </div>
-                        </div>
-                        
-                        {/* <div className="my-10 lg:w-[70%] md:h-[14rem] xs:w-full xs:h-[10rem]">
-                            <h1
-                                className="w-fit font-serif my-4 pb-1 pr-2 rounded-b-md border-b-4 border-blue-600 dark:border-b-4 dark:border-yellow-600 dark:text-white lg:text-4xl md:text-3xl xs:text-xl">
-                                My Location</h1>
-
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d252230.02028974562!2d38.613328040215286!3d8.963479542403238!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sAddis%20Ababa!5e0!3m2!1sen!2set!4v1710567234587!5m2!1sen!2set"
-                                className="rounded-lg w-full h-full" loading="lazy"></iframe>
-
-                        </div> */}
+                <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
+                    <div className="block">
+                        <h3 className="font-manrope font-bold text-4xl text-white mb-1">{authState?.data?.name}</h3>
+                        <p className="font-normal text-base leading-7 text-gray-500">{authState?.data?.email}</p>
                     </div>
-
-                    {/* <div
-                        className="fixed right-2 bottom-20 flex flex-col rounded-sm bg-gray-200 text-gray-500 dark:bg-gray-200/80 dark:text-gray-700 hover:text-gray-600 hover:dark:text-gray-400">
-                        <a href="https://www.linkedin.com/in/samuel-abera-6593a2209/">
-                            <div className="p-2 hover:text-primary hover:dark:text-primary">
-                                <svg className="lg:w-6 lg:h-6 xs:w-4 xs:h-4 text-blue-500" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path d="M7.2 8.809H4V19.5h3.2V8.809Z" />
-                                </svg>
-
-                            </div>
-                        </a>
-                        <a href="https://twitter.com/Samuel7Abera7">
-                            <div className="p-2 hover:text-primary hover:dark:text-primary">
-                                <svg className="lg:w-6 lg:h-6 xs:w-4 xs:h-4 text-gray-900" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path
-                                        d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z" />
-                                </svg>
-
-                            </div>
-                        </a>
-                        <a href="">
-                            <div className="p-2 hover:text-blue-500 hover:dark:text-blue-500">
-                                <svg className="lg:w-6 lg:h-6 xs:w-4 xs:h-4 text-blue-700" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                    viewBox="0 0 24 24">
-                                </svg>
-                            </div>
-                        </a>
-                        <a href="https://www.youtube.com/@silentcoder7">
-                            <div className="p-2 hover:text-primary hover:dark:text-primary">
-                                <svg className="lg:w-6 lg:h-6 xs:w-4 xs:h-4 text-red-600" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                    viewBox="0 0 24 24">
-                                </svg>
-                            </div>
-                        </a>
+                    <button
+                        className="rounded-full py-3.5 px-5 bg-gray-100 flex items-center group transition-all duration-500 hover:bg-indigo-100 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path className="stroke-gray-700 transition-all duration-500 group-hover:stroke-indigo-600"
+                                d="M14.1667 11.6666V13.3333C14.1667 14.9046 14.1667 15.6903 13.6785 16.1785C13.1904 16.6666 12.4047 16.6666 10.8333 16.6666H7.50001C5.92866 16.6666 5.14299 16.6666 4.65483 16.1785C4.16668 15.6903 4.16668 14.9047 4.16668 13.3333V11.6666M16.6667 9.16663V13.3333M11.0157 10.434L12.5064 9.44014C14.388 8.18578 15.3287 7.55861 15.3287 6.66663C15.3287 5.77466 14.388 5.14749 12.5064 3.89313L11.0157 2.8993C10.1194 2.3018 9.67131 2.00305 9.16668 2.00305C8.66205 2.00305 8.21393 2.3018 7.31768 2.8993L5.82693 3.89313C3.9454 5.14749 3.00464 5.77466 3.00464 6.66663C3.00464 7.55861 3.9454 8.18578 5.82693 9.44014L7.31768 10.434C8.21393 11.0315 8.66205 11.3302 9.16668 11.3302C9.67131 11.3302 10.1194 11.0315 11.0157 10.434Z"
+                                stroke="#374151" />
+                        </svg>
+                        <span
+                            className="px-2 font-medium text-base leading-7 text-gray-700 transition-all duration-500 group-hover:text-indigo-600">{authState?.data?.profession}</span>
+                    </button>
+                </div>
+                <div className="flex flex-col lg:flex-row max-lg:gap-5 items-center justify-between py-0.5">
+                    <div className="flex items-center gap-4">
+                        <button onClick={showModal}
+                            className="py-3.5 px-5 rounded-full bg-indigo-600 text-white font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-100 hover:bg-indigo-700">Edit
+                            Profile</button>
+                        <button onClick={onLogout}
+                            className="py-3.5 px-5 rounded-full bg-indigo-50 text-green-700 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Logout</button>
+                            <button onClick={showDeleteModal}
+                            className="py-3.5 px-5 rounded-full bg-indigo-50 text-red-500 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Delete account</button>
+                    </div>
+                    {/* <div className="flex flex-col md:flex-row items-center gap-6 ">
+                        <p className="flex items-center gap-2 font-medium text-lg leading-8 text-gray-400 ">Skills
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8.78135 5.55191C9.4453 3.5173 9.77728 2.5 10.3928 2.5C11.0083 2.5 11.3403 3.5173 12.0043 5.55191L12.2949 6.44244C12.4784 7.00479 12.5701 7.28596 12.7928 7.44706C13.0155 7.60816 13.3125 7.60816 13.9063 7.60816H14.8683C17.0355 7.60816 18.119 7.60816 18.3081 8.19335C18.4972 8.77854 17.6169 9.40763 15.8563 10.6658L15.0921 11.2118C14.6069 11.5586 14.3643 11.732 14.278 11.9937C14.1918 12.2554 14.2841 12.5382 14.4687 13.1038L14.7569 13.9872C15.4209 16.0218 15.7529 17.0391 15.2549 17.3993C14.7569 17.7595 13.8878 17.1308 12.1496 15.8733L11.3887 15.323C10.9083 14.9754 10.6681 14.8016 10.3928 14.8016C10.1175 14.8016 9.87731 14.9754 9.39687 15.323L8.63605 15.8733C6.89779 17.1308 6.02866 17.7595 5.5307 17.3993C5.03273 17.0391 5.36471 16.0218 6.02866 13.9872L6.31927 13.0966C6.50278 12.5343 6.59454 12.2531 6.50948 11.9924C6.42441 11.7318 6.18419 11.558 5.70375 11.2104L4.94293 10.6601C3.20467 9.40261 2.33555 8.77389 2.52575 8.19102C2.71596 7.60816 3.79026 7.60816 5.93886 7.60816H6.87929C7.47315 7.60816 7.77008 7.60816 7.99277 7.44706C8.21547 7.28596 8.30723 7.00479 8.49074 6.44244L8.78135 5.55191Z"
+                                    stroke="#9CA3AF" />
+                            </svg>
+                        </p>
+                        <ul className="flex items-center max-sm:justify-center max-sm:flex-wrap gap-2.5">
+                            <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">HTML</li>
+                            <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">CSS</li>
+                            <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">Dart</li>
+                            <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">C++</li>
+                            <li className="py-3.5 px-7 rounded-full bg-orange-50 font-semibold text-base leading-7 text-gray-700">UI Design</li>
+                        </ul>
                     </div> */}
-
                 </div>
             </div>
+            <EditProfileModal />
+            <DeleteModal />
         </section>
+                                            
     )
 }
 
