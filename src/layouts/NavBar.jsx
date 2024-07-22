@@ -45,7 +45,7 @@ function Navbar(){
                 </ul>
             </div>
             <div className="navbar-end">
-                <Link className="mr-[2rem] bg-transparent hover:bg-transparent hover:cursor-pointer" to={'/profile'}>Profile</Link>
+                <Link className="mr-[2rem] bg-transparent hover:bg-transparent hover:cursor-pointer hover:underline" to={'/profile'}>{authState.data.name}</Link>
             </div>
             </div>
     )

@@ -12,6 +12,11 @@ function AnswerPage() {
     const [date, setDate] = useState("");
     const [idx, setIdx] = useState();
 
+    window.onbeforeunload = function() {
+        console.log('change')
+        return "Dude, are you sure you want to leave? Think of the kittens!";
+    }
+
     function loadUser() {
         const user = authState.userList.find((user) => user._id === quesState.currentQuestion.ques.userId)
         const index = quesState.questionList.findIndex((question) => question._id === quesState.currentQuestion.ques._id);
@@ -69,7 +74,9 @@ function AnswerPage() {
                 </div>
             </article>
             <div className="flex flex-col items-end">
-                {ansState.solutionList[idx]?.map((sol) => {
+                {!ansState.solutionList[idx]?.length ? (
+                    <h2 className="text-white font-thin italic">No answers yet</h2>
+                ):ansState.solutionList[idx]?.map((sol) => {
                     let date = sol?.createdAt?.split('T')[0].split('-');
                     date = date[2] + "-" + date[1] + "-" + date[0];
                     return (<Answer key={sol._id} solId={sol._id} creator={sol.userId} solution={sol.solution} createdAt={date}/>)

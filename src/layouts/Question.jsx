@@ -59,7 +59,7 @@ function Question({questionId,  question, createdAt, creator}) {
     }, [questionId, authState.userList.length])
 
     return (
-        <article className="mb-4 w-[70vw] break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
+        <article className="mb-4 w-full break-inside p-6 bg-gray-700 flex flex-col bg-clip-border">
             <div className="flex pb-6 items-center justify-between">
             <div className="flex">
                 {/* <a className="inline-block mr-4" href="#">

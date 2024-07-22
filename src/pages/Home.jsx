@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSolutions, getSolutionByQuestion } from "../redux/Slices/ans.slice";
 import { getUsers } from "../redux/Slices/auth.slice";
+import Users from "../layouts/Users";
 
 function Home() {
 
@@ -34,12 +35,15 @@ function Home() {
 
     return (
         <>
-            <div className="w-full flex flex-col items-center my-3 mt-24">
-                {authState.userList.length && quesState.questionList?.map((quest) => {
-                    let date = quest.createdAt.split('T')[0].split('-');
-                    date = date[2] + "-" + date[1] + "-" + date[0];
-                    return (<Question key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
-                })}
+            <div className="flex gap-3 mt-20 px-2">
+                <Users />
+                <div className="w-[50vw] flex flex-col items-center my-3">
+                    {authState.userList.length && quesState.questionList?.map((quest) => {
+                        let date = quest.createdAt.split('T')[0].split('-');
+                        date = date[2] + "-" + date[1] + "-" + date[0];
+                        return (<Question key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
+                    })}
+                </div>
             </div>
             <Link to={'/question'}>
                 <button className="btn bg-gray-300 text-black font-bold fixed bottom-10 right-10 hover:bg-gray-400">

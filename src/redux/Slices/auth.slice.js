@@ -9,6 +9,7 @@ const initialState = {
     selectedUser:{
         name: "",
         registered: [],
+        profession: ""
     },
     userList: []
 };
@@ -131,7 +132,8 @@ const authSlice = createSlice({
             if(!action?.payload?.data) return;
             state.selectedUser = {
                 name: action.payload.data.name,
-                registered: action.payload.data.createdAt.split('T')[0].split('-')
+                registered: action.payload.data.createdAt.split('T')[0].split('-'),
+                profession: action.payload.data.profession
             }
         })
         .addCase(getUsers.fulfilled, (state, action) => {
