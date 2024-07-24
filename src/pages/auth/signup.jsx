@@ -14,7 +14,7 @@ function SignUp() {
         name: "",
         email: "",
         profession: "",
-        password: ""
+        password: "",
     })
 
     function handleChange(e) {
@@ -33,6 +33,7 @@ function SignUp() {
             profession: "",
             password: ""
         })
+        setPassword("");
     }
 
     const handleKeyPress = useCallback((e) => {
@@ -47,7 +48,6 @@ function SignUp() {
             toast.error('The passwords do not match'); return;
         }
         resetDetails();
-        console.log(userDetails);
         const response = await dispatch(signup(userDetails));
         if(response.payload) navigate('/login');
     }
