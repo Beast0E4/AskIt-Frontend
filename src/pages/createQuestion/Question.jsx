@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createQuestion } from "../../redux/Slices/ques.slice";
@@ -22,15 +22,17 @@ function Question() {
     }
 
     async function handleSubmit() {
-        console.log(authState);
         if(!question.question.toString().trim()) return;
         const response = await dispatch(createQuestion({
             userId: authState.data._id,
             question: question.question.toString().trim()
         }));
-        console.log(response);
         if(response) navigate('/');
     }
+
+    useEffect(() => {
+        if(!authState.isLoggedIn) navigate('/login');
+    }, []);
 
     return (
         <section className="h-[90vh] flex flex-col items-center pt-6 justify-center">

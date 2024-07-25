@@ -3,6 +3,7 @@ import EditProfileModal from "../../layouts/EditProfileModal";
 import DeleteModal from "../../layouts/DeleteModal";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Slices/auth.slice";
+import { useEffect } from "react";
 
 function Profile() {
 
@@ -21,15 +22,19 @@ function Profile() {
 
     function onLogout(){
         dispatch(logout());
-        navigate('/login');
+        navigate('/');
     }
+
+    useEffect(() => {
+        if(!authState.isLoggedIn) navigate('/login');
+    }, []);
 
     return (
         <section className="relative pt-40 pb-24">
             <div className="w-full absolute top-0 left-0 z-0 h-60 bg-gray-900"></div>
             <div className="w-full max-w-7xl mx-auto px-6 md:px-8">
                 <div className="flex items-center justify-center sm:justify-start relative z-10 mb-5">
-                    <img src="https://pagedone.io/asset/uploads/1705471668.png" alt="user-avatar-image" className="border-4 border-solid border-white rounded-full" />
+                    <img src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png" alt="user-avatar-image" className="border-4 border-solid border-white rounded-full w-32" />
                 </div>
                 <div className="flex flex-col sm:flex-row max-sm:gap-5 items-center justify-between mb-5">
                     <div className="block">

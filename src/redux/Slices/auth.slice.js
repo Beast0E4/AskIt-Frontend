@@ -138,7 +138,7 @@ const authSlice = createSlice({
         })
         .addCase(getUsers.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
-            state.userList = action?.payload?.data?.users;
+            state.userList = action?.payload?.data?.users.reverse();
         });
     }
 });

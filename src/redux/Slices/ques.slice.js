@@ -78,6 +78,18 @@ const QuestionSlice = createSlice({
     name: 'Questions',
     initialState,
     reducers: {
+        filterQuestionById: (state, action) => {
+            console.log(action);
+            const id = action?.payload?.id;
+            state.questionList = state.downloadedQuestions.filter((ques) => ques._id == id);
+        },
+        filterQuestionByUser: (state, action) => {
+            const id = action?.payload?.id;
+            state.questionList = state.downloadedQuestions.filter((ques) => ques.userId == id);
+        },
+        resetQuestionList: (state) => {
+            state.questionList = state.downloadedQuestions;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -92,12 +104,13 @@ const QuestionSlice = createSlice({
         })
         .addCase(createQuestion.fulfilled, (state, action) => {
             if(action?.payload?.data === undefined) return;
-            const newQuestion = action.payload.data;
-            state.downloadedQuestions.push(newQuestion); 
-            console.log(state.downloadedQuestions);
-            state.QuestionList = state.downloadedQuestions;
+            const question = action.payload.data.question;
+            state.downloadedQuestions.push(question); 
+            state.questionList = state.downloadedQuestions;
         })
     }
 });
+
+export const { filterQuestionById, resetQuestionList, filterQuestionByUser } = QuestionSlice.actions;
 
 export default QuestionSlice.reducer;

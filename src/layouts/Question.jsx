@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { currQues } from "../redux/Slices/ques.slice";
+import { currQues, deleteQues } from "../redux/Slices/ques.slice";
 import { useEffect, useState } from "react";
 import { getUser } from "../redux/Slices/auth.slice";
 import UserDetailsModal from "./UserDetailsModal";
+import { MdDelete } from "react-icons/md";
 
 // eslint-disable-next-line react/prop-types
 function Question({questionId,  question, createdAt, creator}) {
@@ -22,7 +23,7 @@ function Question({questionId,  question, createdAt, creator}) {
 
     async function answer() {
         const res =  await dispatch(currQues(questionId));
-        if(res) navigate('/answer');
+        if(res) navigate(`/answer?id=${questionId}`);
     }
 
     function filterquestion() {
@@ -43,13 +44,20 @@ function Question({questionId,  question, createdAt, creator}) {
     }
 
     async function userView() {
+        if(!authState.isLoggedIn) navigate('/login');
         const res = await dispatch(getUser(authState.userList[userIdx]._id));
         if(res){
             document.getElementById('userModal').showModal();
         }
     }
 
+    async function onDelete(){
+        const res = await dispatch(deleteQues(questionId));
+        if(res.payload) location.reload();
+    }
+
     async function onView() {
+        if(!authState.isLoggedIn) navigate('/login');
         const res =  await dispatch(currQues(questionId));
         if(res) navigate('/answers');
     }
@@ -96,11 +104,16 @@ function Question({questionId,  question, createdAt, creator}) {
                 {question}
             </p>
             </div>
-            <div className="w-full flex gap-4">
-                <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">Add answer
-                    <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
-                </button>
-                <button onClick={onView} className="font-medium text-xs text-white hover:underline">View Answers</button>
+            <div className="flex">
+                <div className="w-full flex gap-4">
+                    <button onClick={answer} className="text-xs hover:bg-gray-500 p-2 rounded-md">Add answer
+                        <span className="ml-3">{ansState.solutionList[idx]?.length}</span>
+                    </button>
+                    <button onClick={onView} className="font-medium text-xs text-white hover:underline">View Answers</button>
+                </div>
+                {creator === authState?.data?._id && <div className="flex items-center justify-end w-16">
+                    <MdDelete className="hover:cursor-pointer" onClick={onDelete}/>
+                </div>}
             </div>
             <UserDetailsModal />
         </article>

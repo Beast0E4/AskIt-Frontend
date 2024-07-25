@@ -44,7 +44,6 @@ function SignUp() {
     async function onSubmit() {
         if(!userDetails.email.toString().trim() || !userDetails.name.toString().trim() || !userDetails.password.toString().trim() || !userDetails.profession.toString().trim()) return;
         if(userDetails.password !== password){
-            console.log(password);
             toast.error('The passwords do not match'); return;
         }
         resetDetails();

@@ -1,15 +1,9 @@
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar(){
 
     const authState = useSelector((state) => state.auth);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if(!authState.isLoggedIn) navigate('/login');
-    }, []);
 
     return (
         <div className="navbar bg-base-100 shadow-lg fixed top-0">
@@ -33,7 +27,8 @@ function Navbar(){
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow gap-3">
                     <li><Link to={'/'} id="Home">Home</Link></li>
-                    <li><Link to={'/myquestions'} id="MyQuestions">My Questions</Link></li>
+                    <li><Link to={`/?userid=${authState?.data?._id}`}>My Questions</Link></li>
+                    <li><Link to={'/users'}>Users</Link></li>
                 </ul>
                 </div>
                 <Link to={'/'} className="ml-[2rem] text-xl bg-transparent hover:bg-transparent hover:cursor-pointer font-bold">AskIt</Link>
@@ -41,11 +36,12 @@ function Navbar(){
             <div className="navbar-center hidden lg:flex">
                 <ul className="flex text-base font-medium px-1 gap-5">
                     <li><Link to={'/'} id="Home">Home</Link></li>
-                    <li><Link to={'/myquestions'} id="MyQuestions">My Questions</Link></li>
+                    <li><Link to={`/?userid=${authState?.data?._id}`}>My Questions</Link></li>
+                    <li><Link to={'/users'}>Users</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">
-                <Link className="mr-[2rem] bg-transparent hover:bg-transparent hover:cursor-pointer hover:underline" to={'/profile'}>{authState.data.name}</Link>
+                <Link className="mr-[2rem] bg-transparent hover:bg-transparent hover:cursor-pointer hover:underline" to={'/profile'}>{authState?.data ? authState.data.name : "Profile"}</Link>
             </div>
             </div>
     )

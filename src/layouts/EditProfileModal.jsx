@@ -42,7 +42,7 @@ function EditProfileModal() {
         resetDetails();
         console.log(userDetails);
         const response = await dispatch(updateUser(userDetails));
-        await dispatch(login(userDetails));
+        if(response) await dispatch(login(userDetails));
         if(response.payload) location.reload();
     }
 

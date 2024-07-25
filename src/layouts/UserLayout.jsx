@@ -1,13 +1,18 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../redux/Slices/auth.slice";
 import UserDetailsModal from "./UserDetailsModal";
+import { useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 function UserLayout({username, profession, userId}) {
 
+    const authState = useSelector((state) => state.auth);
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     async function userView(){
+        if(!authState.isLoggedIn) navigate('/login');
         const res = await dispatch(getUser(userId));
         if(res){
             document.getElementById('userModal').showModal();
@@ -16,11 +21,11 @@ function UserLayout({username, profession, userId}) {
 
     return(
         <div role="button"
-            className="flex items-center w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
-            {/* <div className="grid mr-4 place-items-center">
-                <img alt="emma" src="https://docs.material-tailwind.com/img/face-3.jpg"
-                className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-            </div> */}
+            className="flex my-1 p-3 bg-gray-700 ">
+            <div className="grid mr-4 place-items-center">
+                <img alt="profile" src="https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png"
+                className="h-12 w-12 !rounded-full  object-cover object-center" />
+            </div>
             <div>
                 <h6 onClick={userView}
                 className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900 hover:underline">

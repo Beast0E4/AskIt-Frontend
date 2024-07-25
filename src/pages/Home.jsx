@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSolutions, getSolutionByQuestion } from "../redux/Slices/ans.slice";
 import { getUsers } from "../redux/Slices/auth.slice";
-import Users from "../layouts/Users";
 
 function Home() {
 
@@ -20,7 +19,7 @@ function Home() {
         let n = quesState.questionList.length
         for(let i = 0; i < n; i ++){
             const ans = await dispatch(getSolutionByQuestion(quesState.questionList[i]._id));
-            array[i] = ans.payload.data.data;
+            array[i] = ans?.payload?.data?.data;
         }
         await dispatch(getAllSolutions(array));
     }
@@ -31,15 +30,14 @@ function Home() {
 
     useEffect(() => {
         loadSolutions(); loadUsers();
-    }, [quesState.questionList])
+    }, [quesState.downloadedQuestions])
 
     return (
         <>
-            <div className="flex gap-3 mt-20 px-2">
-                <Users />
-                <div className="w-[50vw] flex flex-col items-center my-3">
+            <div className="flex gap-3 justify-center mt-20 px-2">
+                <div className="md:w-[50rem] sm:w-[25rem] flex flex-col items-center my-3">
                     {authState.userList.length && quesState.questionList?.map((quest) => {
-                        let date = quest.createdAt.split('T')[0].split('-');
+                        let date = quest.createdAt?.split('T')[0].split('-');
                         date = date[2] + "-" + date[1] + "-" + date[0];
                         return (<Question key={quest._id} questionId={quest._id} creator={quest.userId} question={quest.question} createdAt={date}/>)
                     })}
