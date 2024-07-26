@@ -12,17 +12,10 @@ function AnswerPage() {
     const [date, setDate] = useState("");
     const [idx, setIdx] = useState();
 
-    window.onbeforeunload = function() {
-        console.log('change')
-        return "Dude, are you sure you want to leave? Think of the kittens!";
-    }
-
     function loadUser() {
         const user = authState.userList.find((user) => user._id === quesState.currentQuestion.ques.userId)
         const index = quesState.questionList.findIndex((question) => question._id === quesState.currentQuestion.ques._id);
-        console.log(index);
         setIdx(index);
-
         const dt = quesState?.currentQuestion?.ques?.createdAt?.split('T')[0].split('-')
         setDate(dt[2] + "-" + dt[1] + "-" + dt[0]);
 

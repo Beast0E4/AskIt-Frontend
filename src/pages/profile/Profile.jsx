@@ -3,14 +3,19 @@ import EditProfileModal from "../../layouts/EditProfileModal";
 import DeleteModal from "../../layouts/DeleteModal";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/Slices/auth.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useQuestions from "../../hooks/useQuestions";
 
 function Profile() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [quesState] = useQuestions();
+
     const authState = useSelector((state) => state.auth); 
+
+    const [listLength, setListLength] = useState(0)
 
     function showModal() {
         document.getElementById('profileModal').showModal();
@@ -20,6 +25,15 @@ function Profile() {
         document.getElementById('deleteModal').showModal();
     }
 
+    function calculateLength(){
+        let len = 0;
+        for(var i = 0; i < quesState.questionList?.length; i ++){
+            len = len + (quesState.questionList[i].userId === authState?.data?._id);
+        }
+        setListLength(len);
+        console.log(listLength);
+    }
+
     function onLogout(){
         dispatch(logout());
         navigate('/');
@@ -27,6 +41,7 @@ function Profile() {
 
     useEffect(() => {
         if(!authState.isLoggedIn) navigate('/login');
+        calculateLength();
     }, []);
 
     return (
@@ -61,6 +76,9 @@ function Profile() {
                             className="py-3.5 px-5 rounded-full bg-indigo-50 text-green-700 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Logout</button>
                             <button onClick={showDeleteModal}
                             className="py-3.5 px-5 rounded-full bg-indigo-50 text-red-500 font-semibold text-base leading-7 shadow-sm shadow-transparent transition-all duration-500 hover:bg-indigo-100">Delete account</button>
+                    </div>
+                    <div className="flex gap-4">
+                        <button onClick={showModal} className="py-2 px-5 rounded-md bg-slate-600 text-white font-semibold text-base transition-all hover:bg-slate-700">{listLength} Questions</button>
                     </div>
                     {/* <div className="flex flex-col md:flex-row items-center gap-6 ">
                         <p className="flex items-center gap-2 font-medium text-lg leading-8 text-gray-400 ">Skills
